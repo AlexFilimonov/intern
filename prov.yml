@@ -1,0 +1,23 @@
+---
+- hosts: default
+  become: yes
+
+  tasks:
+#  - name: disable firewalld
+#    service: name=firewalld state=stopped enabled=no
+
+  - name: disable SELinux
+    selinux: state=disabled
+
+  - name: update the system
+    yum: name='*' state=latest
+
+  - name: reboot the system
+    shell: sleep 2 && shutdown -r now
+    async: 1
+    poll: 0
+    ignore_errors: true
+
+  - name: create ssh config for testinfra
+    shell: vagrant ssh-config > "{{ playbook_dir }}/vagrant_ssh.config"
+    delegate_to: 127.0.0.1
