@@ -9,6 +9,9 @@
   - name: disable SELinux
     selinux: state=disabled
 
+  - name: remove proxy setting
+    lineinfile: path=/etc/yum.conf regexp='^proxy=' state=absent
+
   - name: update the system
     yum: name='*' state=latest
 
